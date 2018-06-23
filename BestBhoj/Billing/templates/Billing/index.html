@@ -11,7 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <form action="" method="POST">
+    <form action="{% url 'index' %}" method="POST">
         {% csrf_token %} 
         {{ form }}
         <input type="submit" value="Submit">

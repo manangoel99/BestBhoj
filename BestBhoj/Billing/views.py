@@ -1,8 +1,10 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
+from .models import orders
 from .forms import LogInForm
 
 
@@ -17,7 +19,12 @@ def index(request):
             #return HttpResponse("Thanks")
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
-                return HttpResponse("<h1>Thanks For Logging In</h1>")
+                login(request, user)
+                all_orders = orders.objects.all()
+                context = {
+                    'all _ orders' : all_orders
+                }
+                return redirect(order_display, user_id=user.pk)
             else:
                 form = LogInForm()
     else:
@@ -25,3 +32,20 @@ def index(request):
     return render(request, 'Billing/index.html', {
         'form' : form
         })
+
+@login_required(login_url='/billing')
+def order_display(request, user_id):
+    print(request.user)
+    if request.user.is_authenticated:
+        print(request.user)
+        all_orders = orders.objects.all()
+        context = {
+            'all_orders': all_orders
+        }
+        return render(request, 'Billing/all_orders.html', context=context)
+    else:
+        return redirect(index)
+
+def log_out(request):
+    logout(request)
+    return redirect(index)
