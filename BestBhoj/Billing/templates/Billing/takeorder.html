@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>All Orders</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<style>
+    ul {
+        list-style-type: none;
+    }
+</style>
+<div class="container">
+    <a href="{% url 'logout' %}" class="btn btn-success">Log Out</a>
+    <a href="{% url 'all_orders' %}" class="btn btn-success">All Orders</a>
+    <br>
+    <br>
+    <br>
+    <form action="{% url 'takeorder' %}" method="post">
+        {% csrf_token %}
+        <h1 class="text-success">
+            <strong> Order </strong>
+        </h1>
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>Type of Thali</th>
+                    <th>Quantity</th>
+                    <th><button type="submit" class="btn btn-success">Place Order</button></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>&#8377; 60</td>
+                    <td>
+                        <input class="thali-num" type="number" value="0" name="60-thali">
+                    </td>
+                </tr>
+                <tr>
+                    <td>&#8377; 75</td>
+                    <td>
+                        <input class="thali-num" type="number" value="0" name="75-thali">
+                    </td>
+                </tr>
+                <tr>
+                    <td>&#8377; 100</td>
+                    <td>
+                        <input class="thali-num" type="number" value="0" name="100-thali">
+                    </td>
+                </tr>
+                <tr>
+                    <td>&#8377; 125</td>
+                    <td>
+                        <input class="thali-num" type="number" value="0" name="125-thali">
+                    </td>
+                </tr>
+                <tr>
+                    <td>&#8377; 150</td>
+                    <td>
+                        <input class="thali-num" type="number" value="0" name="150-thali">
+                    </td>
+                </tr>
+                <tr>
+                    <td>&#8377; 200</td>
+                    <td>
+                        <input class="thali-num" type="number" value="0" name="200-thali">
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Remarks</strong></td>
+                    <td><input type="text" name="remarks"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Name</strong>
+                    </td>
+                    <td>
+                        <input type="text" name="name" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Phone Number</td>
+                    <td>
+                        <input type="text" name="number">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>
+                        <input type="text" name="address">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Delivery Boy
+                    </td>
+                    <td>
+                        <input type="text" name="delivery-boy">
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td>
+                        Total Bill
+                    </td>
+                    <td>
+                        <input id="total" type="text" value="0" name="amount" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <!--<div id="total"></div>-->
+</div>
+<script>
+    $('.thali-num').click(function(){
+        var total = 0;
+        x = $('.thali-num');
+        total += (x[0].value * 60);
+        total += (x[1].value * 75);
+        total += (x[2].value * 100);
+        total += (x[3].value * 125);
+        total += (x[4].value * 150);
+        total += (x[5].value * 200);
+        document.getElementById('total').value = total;
+    })
+</script>
+</html>
