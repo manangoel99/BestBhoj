@@ -35,7 +35,7 @@
             </thead>
             <tbody>
                 {% for order in all_orders %}
-                <tr>
+                <tr class="clickable-row" data-href="{% url 'specific_order' order.id %}">
                     {% if order.payment_status == False %}
                         <td>{{ order.id }}</td>
                         <td>{{ order.name }}</td>
@@ -57,7 +57,7 @@
                 </tr>
                 {% endfor %}
                 {% for order in all_orders %}
-                    <tr>
+                    <tr class="clickable-row" data-href="{% url 'specific_order' order.id %}">
                         {% if order.payment_status == True %}
                         <td>{{ order.id }}</td>
                         <td>{{ order.name }}</td>
@@ -82,5 +82,12 @@
             </tbody>
         </table>
     </div>
+    <script>
+        $(document).ready(function($) {
+            $('.clickable-row').click(function() {
+                window.location = $(this).data('href');
+            });
+        });
+    </script>
 </body>
 </html>

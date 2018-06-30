@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 from .models import orders
@@ -33,6 +33,9 @@ def index(request):
         'form' : form
         })
 
+
+
+
 @login_required(login_url='/billing')
 def order_display(request):
     print(request.user)
@@ -46,6 +49,9 @@ def order_display(request):
         return render(request, 'Billing/all_orders.html', context=context)
     else:
         return redirect(index)
+
+
+
 
 @login_required(login_url='/billing')
 def take_order(request):
@@ -70,6 +76,39 @@ def take_order(request):
             order.save()
             return redirect('all_orders')
         return render(request, 'Billing/takeorder.html')
+
+
+
+@login_required(login_url='/billing')
+def spec_order(request, primary_key):
+    order = orders.objects.get(pk=primary_key)
+    #print(order)
+    if request.method == 'POST':
+        if request.POST['payed_amount'] != '':
+            order.money_received = request.POST['payed_amount']
+            order.balance = request.POST['balance_left']
+            order.payment_status = True
+            order.save()
+            return redirect('all_orders')
+    return render(request, 'Billing/order_page.html', context={
+        'order' : order
+    })
+
+
+
+def ajax(request):
+    data = {
+        'name' : "JAJA"
+    }
+    print(request.GET['phone_number'])
+    data1 = orders.objects.filter(phone_number=request.GET['phone_number'])
+    balace_amount = 0
+    for x in data1:
+        balace_amount += x.balance
+    data = {
+        'data' : balace_amount
+    }
+    return JsonResponse(data)
     
 
 def log_out(request):

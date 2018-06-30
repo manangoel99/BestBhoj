@@ -10,6 +10,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script>
+
+    </script>
 </head>
 <style>
     ul {
@@ -89,6 +92,8 @@
                     <td>
                         <input type="text" name="number">
                     </td>
+                    <td id="existing_balance">
+                    </td>
                 </tr>
                 <tr>
                     <td>Address</td>
@@ -119,7 +124,20 @@
     <!--<div id="total"></div>-->
 </div>
 <script>
-    $('.thali-num').click(function(){
+    $("input[name='number']").keyup(function () {
+        $.ajax({
+            url : 'ajax/phonesearch',
+            data : {
+                'phone_number' : $("input[name='number']").val()
+            },
+            dataType : 'json',
+            success : function(data) {
+                console.log(data);
+                document.getElementById('existing_balance').innerHTML = data.data;
+            }
+        });
+    });
+    $('.thali-num').click(function() {
         var total = 0;
         x = $('.thali-num');
         total += (x[0].value * 60);

@@ -18,7 +18,7 @@ class orders(models.Model):
     payment_status = models.BooleanField(default=False)
     amount = models.IntegerField()
     delivery_boy = models.CharField(max_length=100)
-    money_recieved = models.IntegerField(default=0)
+    money_received = models.IntegerField(default=0)
     balance = models.IntegerField(default=0)
 
     def __str__ (self):
