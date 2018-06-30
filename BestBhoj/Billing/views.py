@@ -97,17 +97,20 @@ def spec_order(request, primary_key):
 
 
 def ajax(request):
-    data = {
-        'name' : "JAJA"
-    }
-    print(request.GET['phone_number'])
     data1 = orders.objects.filter(phone_number=request.GET['phone_number'])
     balace_amount = 0
     for x in data1:
         balace_amount += x.balance
-    data = {
-        'data' : balace_amount
-    }
+    try:
+        data = {
+            'balance' : balace_amount,
+            'name' : data1[0].name,
+            'address' : data1[0].address,
+        }
+    except:
+        data = {
+            'balance' : balace_amount
+        }
     return JsonResponse(data)
     
 
