@@ -35,7 +35,7 @@ def index(request):
 
 
 
-
+#Displaying All Orders 
 @login_required(login_url='/billing')
 def order_display(request):
     print(request.user)
@@ -52,7 +52,7 @@ def order_display(request):
 
 
 
-
+#Displaying Taking Orders Form
 @login_required(login_url='/billing')
 def take_order(request):
     if request.user.is_authenticated:
@@ -78,7 +78,7 @@ def take_order(request):
         return render(request, 'Billing/takeorder.html')
 
 
-
+#Displaying Specific Order Using primary key
 @login_required(login_url='/billing')
 def spec_order(request, primary_key):
     order = orders.objects.get(pk=primary_key)
@@ -95,7 +95,7 @@ def spec_order(request, primary_key):
     })
 
 
-
+#Ajax Request Handling
 def ajax(request):
     data1 = orders.objects.filter(phone_number=request.GET['phone_number'])
     balace_amount = 0
