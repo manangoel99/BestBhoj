@@ -6,12 +6,12 @@ from django.shortcuts import render, redirect
 
 from .models import orders
 from .forms import LogInForm
-import os
-from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
-from InvoiceGenerator.pdf import SimpleInvoice
-
-os.environ['INVOICE_LANG'] = "en"
-OFFICE_ADDRESS = 'First Floor, S.C.O-6, Sector-8, Karnal'
+#import os
+##from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
+##from InvoiceGenerator.pdf import SimpleInvoice
+##
+##os.environ['INVOICE_LANG'] = "en"
+##OFFICE_ADDRESS = 'First Floor, S.C.O-6, Sector-8, Karnal'
 
 # Create your views here.
 def index(request):
@@ -78,19 +78,19 @@ def take_order(request):
             order.operator = request.user
             order.amount = request.POST['amount']
             order.delivery_boy = request.POST['delivery-boy']
-            client = Client(request.POST['name'], request.POST['address'], phone=request.POST['number'])
-            provider = Provider('Best Bhoj',OFFICE_ADDRESS,'Karnal', phone='')
-            creator = Creator(request.user)
-            invoice = Invoice(client, provider, creator)
-            invoice.add_item(Item(request.POST['60-thali'], 60, 'Rs. 60 Thali'))
-            invoice.add_item(Item(request.POST['75-thali'], 75, 'Rs. 75 Thali'))
-            invoice.add_item(Item(request.POST['100-thali'], 100, 'Rs. 100 Thali'))
-            invoice.add_item(Item(request.POST['125-thali'], 125, 'Rs. 125 Thali'))
-            invoice.add_item(Item(request.POST['150-thali'], 150, 'Rs. 150 Thali'))
-            invoice.add_item(Item(request.POST['200-thali'], 200, 'Rs. 200 Thali'))
-            pdf = SimpleInvoice(invoice)
-            print(type(order.pk))
-            pdf.gen('../' + str(request.POST['name']) + '.pdf', generate_qr_code=False)
+            #client = Client(request.POST['name'], request.POST['address'], phone=request.POST['number'])
+            #provider = Provider('Best Bhoj',OFFICE_ADDRESS,'Karnal', phone='')
+            #creator = Creator(request.user)
+            #invoice = Invoice(client, provider, creator)
+            #invoice.add_item(Item(request.POST['60-thali'], 60, 'Rs. 60 Thali'))
+            #invoice.add_item(Item(request.POST['75-thali'], 75, 'Rs. 75 Thali'))
+            #invoice.add_item(Item(request.POST['100-thali'], 100, 'Rs. 100 Thali'))
+            #invoice.add_item(Item(request.POST['125-thali'], 125, 'Rs. 125 Thali'))
+            #invoice.add_item(Item(request.POST['150-thali'], 150, 'Rs. 150 Thali'))
+            #invoice.add_item(Item(request.POST['200-thali'], 200, 'Rs. 200 Thali'))
+            #pdf = SimpleInvoice(invoice)
+            #print(type(order.pk))
+            #pdf.gen('../' + str(request.POST['name']) + '.pdf', generate_qr_code=False)
             order.save()
             return redirect('all_orders')
         return render(request, 'Billing/takeorder.html')
