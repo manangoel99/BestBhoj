@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 from .models import orders
+from .invoice import generate
 from .forms import LogInForm
 #import os
 ##from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
@@ -75,7 +76,7 @@ def take_order(request):
             order.quantity_200 = request.POST['200-thali']
             order.address = request.POST['address']
             order.remarks = request.POST['remarks']
-            order.operator = request.user
+            order.operator = request.user.username
             order.amount = request.POST['amount']
             order.delivery_boy = request.POST['delivery-boy']
             #client = Client(request.POST['name'], request.POST['address'], phone=request.POST['number'])
@@ -92,6 +93,7 @@ def take_order(request):
             #print(type(order.pk))
             #pdf.gen('../' + str(request.POST['name']) + '.pdf', generate_qr_code=False)
             order.save()
+            generate(request, order)
             return redirect('all_orders')
         return render(request, 'Billing/takeorder.html')
 
