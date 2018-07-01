@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>All Customers</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'logout' %}" class="btn btn-success">Log Out</a>
+        <a href="{% url 'takeorder' %}" class="btn btn-success">Take Order</a>
+        <a href="{% url 'all_orders' %}" class="btn btn-success">All Orders</a>
+        <a href="{% url 'all_customers' %}" class="btn btn-success">All Customers</a>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Phone Number
+                    </th>
+                    <th>
+                        Balance
+                    </th>
+                    <th>
+                        <input id="number_search" type="text" placeholder="Enter Mobile Number">
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="data">
+                {% for number, balance in customer_dict.items %}
+                    <tr id="{{ number }}">
+                        <td class="phone_number">{{ number }}</td>
+                        <td>
+                            {{ balance }}
+                        </td>
+                    </tr>
+                  
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $('#number_search').keyup(function() {
+            var numbers = $('.phone_number');
+            var num = []
+            for (var i = 0; i < numbers.length; i += 1) {
+                num.push(numbers[i].innerHTML.replace('\n', ''));
+            }
+            z = [];
+            for (var i = 0; i < num.length; i += 1) {
+                k = $('#number_search').val();
+                if (num[i].includes(k) == true) {
+                    z.push(num[i]);
+                }
+            }
+            var c = document.getElementById('data').childNodes;
+            var m = []
+            for (var i = 0; i < c.length; i += 1) {
+                    if (c[i].id != undefined) {
+                        document.getElementById(c[i].id).style.display = "";
+                        m.push(c[i].id);
+                    }
+            }
+            b = [];
+            for (var i = 0; i < m.length; i += 1) {
+                if (z.includes(m[i]) == false) {
+                    b.push(m[i]);
+                }
+            }
+            
+            for (var i = 0; i < b.length; i += 1) {
+                document.getElementById(b[i]).style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
