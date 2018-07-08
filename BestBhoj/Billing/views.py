@@ -79,6 +79,7 @@ def take_order(request):
             order.operator = request.user.username
             order.amount = request.POST['amount']
             order.delivery_boy = request.POST['delivery-boy']
+            order.balance = 0 - int(request.POST['amount'])
             #client = Client(request.POST['name'], request.POST['address'], phone=request.POST['number'])
             #provider = Provider('Best Bhoj',OFFICE_ADDRESS,'Karnal', phone='')
             #creator = Creator(request.user)
@@ -150,6 +151,11 @@ def all_customers(request):
     return render(request, 'Billing/all_customers.html', context={
         'customer_dict' : customer_dict
     })
+
+#Show Specific Date
+@login_required(login_url='/billing')
+def spec_day(request, date):
+    pass
 
 def log_out(request):
     logout(request)

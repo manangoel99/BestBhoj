@@ -54,4 +54,4 @@ def generate(request, order):
         invoice.add_item(Item(int(quantity_200), 200, 'Rs 200 Thali'))
 
     pdf = SimpleInvoice(invoice)
-    pdf.gen('../Bills/' + name + str(order.pk) + str(datetime.date.today()) + '.pdf')
+    pdf.gen('./Bills/' + name + str(order.pk) + str(datetime.date.today()) + '.pdf')
