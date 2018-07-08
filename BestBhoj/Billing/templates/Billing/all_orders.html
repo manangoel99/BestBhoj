@@ -15,6 +15,7 @@
         <a href="{% url 'logout' %}" class="btn btn-success">Log Out</a>
         <a href="{% url 'takeorder' %}" class="btn btn-success">Take Order</a>
         <a href="{% url 'all_customers' %}" class="btn btn-success">All Customers</a>
+        <a href="{% url 'dayrec' %}" class="btn btn-success">Record Of Day</a>
         <br>
         <br>
         <br>
@@ -32,6 +33,7 @@
                     <th>Operator</th>
                     <th>Payment Status</th>
                     <th>Amount</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,15 +65,20 @@
                                &#8377;150 Thali - {{ order.quantity_150 }}
                                <br> 
                             {% endif %}
-                            {% if order.quantity_60 > 0 %} 
+                            {% if order.quantity_200 > 0 %} 
                                 &#8377;200 Thali - {{ order.quantity_200 }}
                                 <br> 
                             {% endif %}
                         </td>
                         <td>{{ order.remarks }}</td>
                         <td>{{ order.operator }}</td>
-                        <td>{{ order.payment_status }}</td>
+                        {% if order.payment_status == False %}
+                            <td>Pending</td>
+                        {% else %}
+                            <td>Paid</td>
+                        {% endif %}
                         <td>&#8377;{{ order.amount }}</td>
+                        <td>{{ order.date }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}

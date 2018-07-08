@@ -80,20 +80,8 @@ def take_order(request):
             order.amount = request.POST['amount']
             order.delivery_boy = request.POST['delivery-boy']
             order.balance = 0 - int(request.POST['amount'])
-            #client = Client(request.POST['name'], request.POST['address'], phone=request.POST['number'])
-            #provider = Provider('Best Bhoj',OFFICE_ADDRESS,'Karnal', phone='')
-            #creator = Creator(request.user)
-            #invoice = Invoice(client, provider, creator)
-            #invoice.add_item(Item(request.POST['60-thali'], 60, 'Rs. 60 Thali'))
-            #invoice.add_item(Item(request.POST['75-thali'], 75, 'Rs. 75 Thali'))
-            #invoice.add_item(Item(request.POST['100-thali'], 100, 'Rs. 100 Thali'))
-            #invoice.add_item(Item(request.POST['125-thali'], 125, 'Rs. 125 Thali'))
-            #invoice.add_item(Item(request.POST['150-thali'], 150, 'Rs. 150 Thali'))
-            #invoice.add_item(Item(request.POST['200-thali'], 200, 'Rs. 200 Thali'))
-            #pdf = SimpleInvoice(invoice)
-            #print(type(order.pk))
-            #pdf.gen('../' + str(request.POST['name']) + '.pdf', generate_qr_code=False)
             order.save()
+            print(order.date)
             generate(request, order)
             return redirect('all_orders')
         return render(request, 'Billing/takeorder.html')
@@ -154,8 +142,21 @@ def all_customers(request):
 
 #Show Specific Date
 @login_required(login_url='/billing')
-def spec_day(request, date):
-    pass
+def dayrec(request):
+    if request.method == 'GET':
+        return render(request, 'Billing/spec_day_input.html')
+    if request.method == 'POST':
+        #print(request.POST)
+        #print(orders.objects.filter(date=request.POST['DayDate']))
+        #return HttpResponse('Hola')
+        reqd = orders.objects.filter(date=request.POST['DayDate'])
+        tot_money_received = 0
+        for order in reqd:
+            tot_money_received += order.money_received
+        return render(request, 'Billing/spec_day_record.html', context= {
+            'orders' : reqd,
+            'money_received' : tot_money_received
+        })
 
 def log_out(request):
     logout(request)

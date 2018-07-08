@@ -20,6 +20,7 @@ class orders(models.Model):
     delivery_boy = models.CharField(max_length=100)
     money_received = models.IntegerField(default=0)
     balance = models.IntegerField(default=0)
+    date = models.DateField(auto_now_add=True)
 
     def __str__ (self):
         return 'Order For ' + self.name 
