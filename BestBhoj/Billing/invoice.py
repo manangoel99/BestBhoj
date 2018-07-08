@@ -10,19 +10,12 @@ def generate(request, order):
     name = str(order.name)
     phone_number = str(order.phone_number)
     address = str(order.address)
-    #order = models.CharField(max_length=1000)
     quantity_60 = int(order.quantity_60)
     quantity_75 = int(order.quantity_75)
     quantity_100 = int(order.quantity_100)
     quantity_125 = int(order.quantity_125)
     quantity_150 = int(order.quantity_150)
     quantity_200 = int(order.quantity_200)
-    #print(
-    #    type(name),
-    #    type(phone_number),
-    #    type(address),
-    #    type(quantity_60)
-    #)
     client = Client(
         summary=name,
         address=address,
@@ -34,7 +27,6 @@ def generate(request, order):
         'Karnal',
         '132001'
         )
-    print(request.user.username)
     creator = Creator(request.user.username)
 
     invoice = Invoice(client, provider, creator)
@@ -54,4 +46,8 @@ def generate(request, order):
         invoice.add_item(Item(int(quantity_200), 200, 'Rs 200 Thali'))
 
     pdf = SimpleInvoice(invoice)
-    pdf.gen('./Bills/' + name + str(order.pk) + str(datetime.date.today()) + '.pdf')
+    try:
+        pdf.gen('./Bills/' + name + str(order.pk) + str(datetime.date.today()) + '.pdf')
+    except:
+        os.system('mkdir ./Bills')
+        pdf.gen('./Bills/' + name + str(order.pk) + str(datetime.date.today()) + '.pdf')

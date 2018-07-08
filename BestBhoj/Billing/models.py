@@ -24,3 +24,10 @@ class orders(models.Model):
 
     def __str__ (self):
         return 'Order For ' + self.name 
+
+class customers(models.Model):
+    number = models.CharField(max_length=15)
+    balance = models.IntegerField(default=0)
+
+    def __str__(self):
+        return 'Customer : ' + self.number + ' ' + str(self.balance)
