@@ -1,0 +1,162 @@
+{% extends "Billing/base.html" %}
+{% block content %}  
+<div class="container">
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <form action="{% url 'specific_order' order.pk %}" method="post">
+      {% csrf_token %}
+      <h1 class="text-success">
+        <strong> Order </strong>
+      </h1>
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th>Type of Thali</th>
+            <th>Quantity</th>
+            <th>
+              <button type="submit" class="btn btn-success">Edit Order</button>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>&#8377; 60</td>
+            <td>
+              <input class="thali-num" type="number" value="{{ order.quantity_60 }}" name="60-thali" >
+            </td>
+          </tr>
+          <tr>
+            <td>&#8377; 75</td>
+            <td>
+              <input class="thali-num" type="number" value="{{ order.quantity_75 }}" name="75-thali" >
+            </td>
+          </tr>
+          <tr>
+            <td>&#8377; 100</td>
+            <td>
+              <input class="thali-num" type="number" value="{{ order.quantity_100 }}" name="100-thali" >
+            </td>
+          </tr>
+          <tr>
+            <td>&#8377; 125</td>
+            <td>
+              <input class="thali-num" type="number" value="{{ order.quantity_125 }}" name="125-thali" >
+            </td>
+          </tr>
+          <tr>
+            <td>&#8377; 150</td>
+            <td>
+              <input class="thali-num" type="number" value="{{ order.quantity_150 }}" name="150-thali" >
+            </td>
+          </tr>
+          <tr>
+            <td>&#8377; 200</td>
+            <td>
+              <input class="thali-num" type="number" value="{{ order.quantity_200 }}" name="200-thali" >
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Remarks</strong>
+            </td>
+            <td>
+              <input type="text" name="remarks" value="{{ order.remarks }}" >
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Name</strong>
+            </td>
+            <td>
+              <input type="text" name="name" value="{{ order.name }}" required >
+            </td>
+          </tr>
+          <tr>
+            <td>Phone Number</td>
+            <td>
+              <input type="text" value="{{ order.phone_number }}" name="number" readonly>
+            </td>
+          </tr>
+          <tr>
+            <td>Address</td>
+            <td>
+              <input type="text" value="{{ order.address }}" name="address" >
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Delivery Boy
+            </td>
+            <td>
+              <input type="text" value="{{ order.delivery_boy }}" name="delivery-boy" >
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Total Bill
+            </td>
+            <td>
+              <input id="total" type="text" value="{{ order.amount }}" name="amount" >
+            </td>
+          </tr>
+          {% if order.money_received %}
+          <tr>
+            <td>Payment Made</td>
+            <td>
+              <input id="payed_amount" type="text" name="payed_amount"  value="{{ order.money_received }}">
+            </td>
+          </tr>
+          <tr>
+            <td>Balance</td>
+            <td>
+              <input id="balance" type="text" name="balance_left" value="{{ order.balance }}" >
+            </td>
+          </tr>
+          {% else %}
+
+            <tr>
+              <td>Payment Made</td>
+              <td>
+                <input id="payed_amount" type="text" name="payed_amount">
+              </td>
+            </tr>
+            <tr>
+              <td>Balance</td>
+              <td>
+                <input id="balance" type="text" name="balance_left">
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <script>
+    $(document).ready(function (){
+      $('#payed_amount').keyup(function (){
+        $('#balance').val(-1 * (parseInt($('#payed_amount').val()) - parseInt($('#total').val())));
+      });
+
+      $('#status').click(function (){
+        console.log($('#status').val())
+      })
+    });
+    $('.thali-num').click(function () {
+            var total = 0;
+            x = $('.thali-num');
+            total += (x[0].value * 60);
+            total += (x[1].value * 75);
+            total += (x[2].value * 100);
+            total += (x[3].value * 125);
+            total += (x[4].value * 150);
+            total += (x[5].value * 200);
+            document.getElementById('total').value = total;
+    });
+  </script>
+  
+{% endblock content %}

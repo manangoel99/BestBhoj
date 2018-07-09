@@ -92,7 +92,7 @@ def take_order(request):
 def spec_order(request, primary_key):
     order = orders.objects.get(pk=primary_key)
     #print(order)
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_superuser == False:
         if request.POST['payed_amount'] != '':
             order.money_received = request.POST['payed_amount']
             order.balance = request.POST['balance_left']
@@ -102,9 +102,37 @@ def spec_order(request, primary_key):
             x.save()
             order.save()
             return redirect('all_orders')
-    return render(request, 'Billing/order_page.html', context={
-        'order' : order
-    })
+    if request.user.is_superuser and request.method == 'POST':
+        #print(request.POST)
+        x = customers.objects.get(number=order.phone_number)
+        x.balance -= int(order.amount)
+        order.quantity_60 = request.POST['60-thali']
+        order.quantity_75 = request.POST['75-thali']
+        order.quantity_100 = request.POST['100-thali']
+        order.quantity_125 = request.POST['125-thali']
+        order.quantity_150 = request.POST['150-thali']
+        order.quantity_200 = request.POST['200-thali']
+        order.address = request.POST['address']
+        order.remarks = request.POST['remarks']
+        order.amount = request.POST['amount']
+        order.balance = int(request.POST['amount'])
+        x.balance += int(request.POST['amount'])
+        if request.POST['payed_amount'] != '':
+            order.money_received = request.POST['payed_amount']
+            order.balance = request.POST['balance_left']
+            order.payment_status = True
+            x.balance -= int(order.money_received)
+        order.save()
+        x.save()
+        return redirect('all_orders')
+    if request.user.is_superuser and request.method == 'GET':
+        return render(request, 'Billing/mod_order_admin.html', context={
+            'order' : order
+        })
+    if request.user.is_superuser == False and request.method == 'GET':
+        return render(request, 'Billing/order_page.html', context={
+            'order': order
+        })
 
 
 #Ajax Request Handling
@@ -160,6 +188,15 @@ def dayrec(request):
             'orders' : reqd,
             'money_received' : tot_money_received
         })
+
+@login_required(login_url='/billing')
+def custompage(request, number):
+    order = orders.objects.filter(phone_number=number)
+    customer = customers.objects.get(number=number)
+    return render(request, 'Billing/custom_orders.html', context={
+        'customer' : customer,
+        'all_orders' : order
+    })
 
 def log_out(request):
     logout(request)

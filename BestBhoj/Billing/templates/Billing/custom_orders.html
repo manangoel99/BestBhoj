@@ -1,6 +1,14 @@
 {% extends "Billing/base.html" %}
 {% block content %}
     <div class="container">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h1 class="text-success">
+            Pending Amount : {{ customer.balance }}
+        </h1>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -14,11 +22,10 @@
                     <th>Payment Status</th>
                     <th>Amount</th>
                     <th>Date</th>
-                    <th>Money Received</th>
                 </tr>
             </thead>
             <tbody>
-                {% for order in orders %}
+                {% for order in all_orders %}
                 <tr class="clickable-row" data-href="{% url 'specific_order' order.id %}">
                     <td>{{ order.id }}</td>
                     <td>{{ order.name }}</td>
@@ -42,14 +49,8 @@
                     {% endif %}
                     <td>&#8377;{{ order.amount }}</td>
                     <td>{{ order.date }}</td>
-                    <td>{{ order.money_received }}</td>
                 </tr>
                 {% endfor %}
-                <tr>
-                    <td colspan="10">Total Money</td>
-                    <td>{{ money_received }}</td>
-                </tr>
-            </tbody>
         </table>
     </div>
     <script>

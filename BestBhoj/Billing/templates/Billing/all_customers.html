@@ -23,7 +23,7 @@
             </thead>
             <tbody id="data">
                 {% for number, balance in customer_dict.items %}
-                    <tr id="{{ number }}">
+                    <tr id="{{ number }}" class="clickable-row" data-href="{% url 'custompage' number %}">
                         <td class="phone_number">{{ number }}</td>
                         <td>
                             {{ balance }}
@@ -66,6 +66,11 @@
             for (var i = 0; i < b.length; i += 1) {
                 document.getElementById(b[i]).style.display = "none";
             }
+        });
+        $(document).ready(function($) {
+            $('.clickable-row').click(function() {
+                window.location = $(this).data('href');
+            });
         });
     </script>
 
