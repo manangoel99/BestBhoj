@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Welcome {{ user }}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-</head>
-<body>
+{% extends "Billing/base.html" %}
+{% block content %}
     <div class="container">
-        <a href="{% url 'logout' %}" class="btn btn-success">Log Out</a>
-        <a href="{% url 'takeorder' %}" class="btn btn-success">Take Order</a>
-        <a href="{% url 'all_customers' %}" class="btn btn-success">All Customers</a>
-        <a href="{% url 'dayrec' %}" class="btn btn-success">Record Of Day</a>
         <br>
         <br>
         <br>
@@ -45,30 +30,13 @@
                         <td>{{ order.phone_number }}</td>
                         <td>{{ order.address }}</td>
                         <td style="font-size:0.65vw;">
-                            {% if order.quantity_60 > 0 %}
-                                 &#8377;60 Thali - {{ order.quantity_60 }}
-                                <br>
-                            {% endif %}
-                            {% if order.quantity_75 > 0 %}
-                                &#8377;75 Thali - {{ order.quantity_75 }}
-                                <br> 
-                            {% endif %}
-                            {% if order.quantity_100 > 0 %} 
-                               &#8377;100 Thali - {{ order.quantity_100 }}
-                               <br> 
-                            {% endif %}
-                            {% if order.quantity_125 > 0 %} 
-                                &#8377;125 Thali - {{ order.quantity_125 }}
-                                <br> 
-                            {% endif %}
-                            {% if order.quantity_150 > 0 %} 
-                               &#8377;150 Thali - {{ order.quantity_150 }}
-                               <br> 
-                            {% endif %}
-                            {% if order.quantity_200 > 0 %} 
-                                &#8377;200 Thali - {{ order.quantity_200 }}
-                                <br> 
-                            {% endif %}
+                             {% if order.quantity_60 > 0 %} &#8377;60 Thali - {{ order.quantity_60 }}
+                            <br> {% endif %} {% if order.quantity_75 > 0 %} &#8377;75 Thali - {{ order.quantity_75 }}
+                            <br> {% endif %} {% if order.quantity_100 > 0 %} &#8377;100 Thali - {{ order.quantity_100 }}
+                            <br> {% endif %} {% if order.quantity_125 > 0 %} &#8377;125 Thali - {{ order.quantity_125 }}
+                            <br> {% endif %} {% if order.quantity_150 > 0 %} &#8377;150 Thali - {{ order.quantity_150 }}
+                            <br> {% endif %} {% if order.quantity_200 > 0 %} &#8377;200 Thali - {{ order.quantity_200 }}
+                            <br> {% endif %}
                         </td>
                         <td>{{ order.remarks }}</td>
                         <td>{{ order.operator }}</td>
@@ -105,6 +73,7 @@
                         {% endif %}
                         <td>&#8377;{{ order.amount }}</td>
                         {% endif %}
+                        <td>{{ order.date }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -117,5 +86,4 @@
             });
         });
     </script>
-</body>
-</html>
+{% endblock content %}

@@ -1,22 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>All Customers</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-</head>
-<body>
+{% extends "Billing/base.html" %}
+{% block content %}
     <div class="container">
-        <a href="{% url 'logout' %}" class="btn btn-success">Log Out</a>
-        <a href="{% url 'takeorder' %}" class="btn btn-success">Take Order</a>
-        <a href="{% url 'all_orders' %}" class="btn btn-success">All Orders</a>
-        <a href="{% url 'all_customers' %}" class="btn btn-success">All Customers</a>
-        <a href="{% url 'dayrec' %}" class="btn btn-success">Record Of Day</a>
 
         <br>
         <br>
@@ -84,5 +68,5 @@
             }
         });
     </script>
-</body>
-</html>
+
+{% endblock content %}

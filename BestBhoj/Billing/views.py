@@ -4,25 +4,15 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from .models import orders
+from .models import orders, customers
 from .invoice import generate
 from .forms import LogInForm
-#import os
-##from InvoiceGenerator.api import Invoice, Item, Client, Provider, Creator
-##from InvoiceGenerator.pdf import SimpleInvoice
-##
-##os.environ['INVOICE_LANG'] = "en"
-##OFFICE_ADDRESS = 'First Floor, S.C.O-6, Sector-8, Karnal'
 
 # Create your views here.
 def index(request):
-    #context = {}
-    #return render(request, 'Billing/index.html', context)
     if request.method == 'POST':
         form = LogInForm(request.POST)
         if form.is_valid():
-            #print(form.cleaned_data)
-            #return HttpResponse("Thanks")
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
@@ -79,8 +69,18 @@ def take_order(request):
             order.operator = request.user.username
             order.amount = request.POST['amount']
             order.delivery_boy = request.POST['delivery-boy']
-            order.balance = 0 - int(request.POST['amount'])
+            order.balance = int(request.POST['amount'])
             order.save()
+            try:
+                x = customers.objects.get(number=order.phone_number)
+                print(type(x))
+                x.balance += order.balance
+                x.save()
+            except:
+                x = customers()
+                x.number = order.phone_number
+                x.balance = order.balance
+                x.save()
             print(order.date)
             generate(request, order)
             return redirect('all_orders')
@@ -97,6 +97,9 @@ def spec_order(request, primary_key):
             order.money_received = request.POST['payed_amount']
             order.balance = request.POST['balance_left']
             order.payment_status = True
+            x = customers.objects.get(number=order.phone_number)
+            x.balance -= int(order.money_received)
+            x.save()
             order.save()
             return redirect('all_orders')
     return render(request, 'Billing/order_page.html', context={
