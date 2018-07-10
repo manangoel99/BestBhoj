@@ -7,6 +7,9 @@
     <br>
     <br>
     <br>
+    <h1 class="text-success">
+      Current Balance : {{ customer.balance }}
+    </h1>
 
     <form action="{% url 'specific_order' order.pk %}" method="post">
       {% csrf_token %}
@@ -20,6 +23,9 @@
             <th>Quantity</th>
             <th>
               <button type="submit" class="btn btn-success">Edit Order</button>
+            </th>
+            <th>
+              <a href="/bill/{{ order.pk }}" class="btn btn-success" target="_blank">Print Bill</a>
             </th>
           </tr>
         </thead>

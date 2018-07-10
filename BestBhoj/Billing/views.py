@@ -126,11 +126,15 @@ def spec_order(request, primary_key):
         x.save()
         return redirect('all_orders')
     if request.user.is_superuser and request.method == 'GET':
+        x = customers.objects.get(number=order.phone_number)
         return render(request, 'Billing/mod_order_admin.html', context={
+            'customer' : x,
             'order' : order
         })
     if request.user.is_superuser == False and request.method == 'GET':
+        x = customers.objects.get(number=order.phone_number)
         return render(request, 'Billing/order_page.html', context={
+            'customer' : x,
             'order': order
         })
 
@@ -196,6 +200,19 @@ def custompage(request, number):
     return render(request, 'Billing/custom_orders.html', context={
         'customer' : customer,
         'all_orders' : order
+    })
+
+@login_required(login_url='/billing')
+def genbill(request, order_num):
+    order = orders.objects.get(pk=order_num)
+    return render(request, 'Billing/bill_template.html', context={
+        'order' : order,
+        'price_60' :  60 * order.quantity_60,
+        'price_75' :  75 * order.quantity_75,
+        'price_100' :  100 * order.quantity_100,
+        'price_125' :  125 * order.quantity_125,
+        'price_150' :  150 * order.quantity_150,
+        'price_200' :  200 * order.quantity_200,
     })
 
 def log_out(request):

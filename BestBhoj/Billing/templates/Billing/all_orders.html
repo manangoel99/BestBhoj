@@ -70,6 +70,8 @@
                         <td>{{ order.operator }}</td>
                         {% if order.payment_status == True %}
                             <td>Paid</td>
+                        {% else %}
+                            <td>Pending</td>
                         {% endif %}
                         <td>&#8377;{{ order.amount }}</td>
                         {% endif %}

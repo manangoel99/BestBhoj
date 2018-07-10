@@ -10,5 +10,6 @@ urlpatterns = [
     path('ajax/phonesearch', views.ajax, name='AjaxPhoneSearch'),
     path('allcustomers', views.all_customers, name='all_customers'),
     path('dayrec', views.dayrec, name='dayrec'),
-    path('custompage/<number>', views.custompage, name='custompage')
+    path('custompage/<number>', views.custompage, name='custompage'),
+    path('bill/<order_num>', views.genbill, name='genbill')
 ]
