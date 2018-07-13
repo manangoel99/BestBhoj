@@ -32,6 +32,8 @@
                         <th>Phone Number</th>
                         <th>Address</th>
                         <th>Delivery Boy</th>
+                        <th>Order Details</th>
+                        <th>Print Bill</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +46,9 @@
                                 <button type="button" data-toggle="modal" data-target="#ordermodal{{ order.pk }}" class="btn btn-success">
                                     Order Details
                                 </button>
+                            </td>
+                            <td>
+                                <a href="/bill/{{ order.pk }}" class="btn btn-success" target="_blank">Print Bill</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -73,6 +78,13 @@
                             <br> {% endif %}
                             <br>
                             Total : {{ order.amount }}
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="text" name="delivery_boy"  placeholder="Enter Delivery Boy">
+                                <input type="submit" value="Delivery Sent" id="ajaj" class="btn btn-success" name="status_change">
+                                <input type="number" id="order_id" name="order_id" value="{{ order.pk }}" style="display:none;">
+                                <!--<a href="/bill/{{ order.pk }}" class="btn btn-success" target="_blank">Print Bill</a>-->
+                            </form>
                         </div>
             
                         <!-- Modal footer -->
@@ -97,5 +109,11 @@
             {% endblock %}
         </div>
     </div>
+    <script>
+        $('#ajaj').click(function () {
+            x = $('#order_id').val();
+            window.open('/bill/' + x, '_blank');
+        });
+    </script>
 </body>
 </html>

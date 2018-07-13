@@ -8,6 +8,14 @@ from .models import orders, customers
 from .forms import LogInForm
 
 # Create your views here.
+def status_change(request):
+    print(request.POST)
+    order = orders.objects.get(pk=int(request.POST['order_id']))
+    print(order)
+    order.delivery_boy = request.POST['delivery_boy']
+    order.delivery_status = True
+    order.save()
+
 def get_undelivered():
     return orders.objects.filter(delivery_status=False)
 
@@ -36,9 +44,12 @@ def index(request):
 #Displaying All Orders 
 @login_required(login_url='/billing')
 def order_display(request):
-    print(request.user)
+   # print(request.user)
     if request.user.is_authenticated:
-        print(request.user)
+        #print(request.user)
+        if request.method == 'POST' and 'status_change' in request.POST:
+            print(request.POST)
+            status_change(request)
         all_orders = orders.objects.all()
         context = {
             'all_orders': all_orders,
@@ -58,35 +69,39 @@ def take_order(request):
         print(request.user)
         #print(request.method)
         if request.method == 'POST':
-            order = orders()
-            order.name = request.POST['name']
-            order.phone_number = request.POST['number']
-            order.quantity_60 = request.POST['60-thali']
-            order.quantity_75 = request.POST['75-thali']
-            order.quantity_100 = request.POST['100-thali']
-            order.quantity_125 = request.POST['125-thali']
-            order.quantity_150 = request.POST['150-thali']
-            order.quantity_200 = request.POST['200-thali']
-            order.address = request.POST['address']
-            order.remarks = request.POST['remarks']
-            order.operator = request.user.username
-            order.amount = request.POST['amount']
-            order.delivery_boy = request.POST['delivery-boy']
-            order.balance = int(request.POST['amount'])
-            order.save()
-            try:
-                x = customers.objects.get(number=order.phone_number)
-                print(type(x))
-                x.balance += order.balance
-                x.save()
-            except:
-                x = customers()
-                x.number = order.phone_number
-                x.balance = order.balance
-                x.save()
-            print(order.date)
-            #generate(request, order)
-            return redirect('all_orders')
+            if 'status_change' in request.POST:
+                print(request.POST)
+                status_change(request)
+            else:
+                order = orders()
+                order.name = request.POST['name']
+                order.phone_number = request.POST['number']
+                order.quantity_60 = request.POST['60-thali']
+                order.quantity_75 = request.POST['75-thali']
+                order.quantity_100 = request.POST['100-thali']
+                order.quantity_125 = request.POST['125-thali']
+                order.quantity_150 = request.POST['150-thali']
+                order.quantity_200 = request.POST['200-thali']
+                order.address = request.POST['address']
+                order.remarks = request.POST['remarks']
+                order.operator = request.user.username
+                order.amount = request.POST['amount']
+                order.delivery_boy = request.POST['delivery-boy']
+                order.balance = int(request.POST['amount'])
+                order.save()
+                try:
+                    x = customers.objects.get(number=order.phone_number)
+                    print(type(x))
+                    x.balance += order.balance
+                    x.save()
+                except:
+                    x = customers()
+                    x.number = order.phone_number
+                    x.balance = order.balance
+                    x.save()
+                print(order.date)
+                #generate(request, order)
+                return redirect('all_orders')
         return render(request, 'Billing/takeorder.html', context={
             'undelivered': get_undelivered()
         })
@@ -96,8 +111,26 @@ def take_order(request):
 @login_required(login_url='/billing')
 def spec_order(request, primary_key):
     order = orders.objects.get(pk=primary_key)
+    if request.method == 'POST' and 'status_change' in request.POST:
+        print(request.POST)
+        status_change(request)
+        if request.user.is_superuser:
+            x = customers.objects.get(number=order.phone_number)
+            return render(request, 'Billing/mod_order_admin.html', context={
+                'customer': x,
+                'order': order,
+                'undelivered': get_undelivered()
+            })
+        else:
+            x = customers.objects.get(number=order.phone_number)
+            return render(request, 'Billing/order_page.html', context={
+                'customer': x,
+                'order': order,
+                'undelivered': get_undelivered()
+            })
+            
     #print(order)
-    if request.method == 'POST' and request.user.is_superuser == False:
+    if request.method == 'POST' and request.user.is_superuser == False and 'status_change' not in request.POST:
         if request.POST['payed_amount'] != '':
             order.money_received = request.POST['payed_amount']
             order.balance = request.POST['balance_left']
@@ -107,7 +140,7 @@ def spec_order(request, primary_key):
             x.save()
             order.save()
             return redirect('all_orders')
-    if request.user.is_superuser and request.method == 'POST':
+    if request.user.is_superuser and request.method == 'POST' and 'status_change' not in request.POST:
         #print(request.POST)
         x = customers.objects.get(number=order.phone_number)
         x.balance -= int(order.amount)
@@ -152,7 +185,7 @@ def ajax(request):
     balace_amount = 0
     for x in data1:
         balace_amount += x.balance
-    try:
+    try:    
         data = {
             'balance' : balace_amount,
             'name' : data1[0].name,
@@ -168,6 +201,10 @@ def ajax(request):
 #Show All Customers
 @login_required(login_url='/billing')
 def all_customers(request):
+    if request.method == 'POST':
+        if 'status_change' in request.POST:
+            print(request.POST)
+            status_change(request)
     customers = orders.objects.values('phone_number').all().distinct()
     customer_dict = {}
     for x in customers:
@@ -203,9 +240,12 @@ def dayrec(request):
             'money_received' : tot_money_received,
             'undelivered': get_undelivered()
         })
-
+    
 @login_required(login_url='/billing')
 def custompage(request, number):
+    if request.method == 'POST' and 'status_change' in request.POST:
+        print(request.POST)
+        status_change(request)
     order = orders.objects.filter(phone_number=number)
     customer = customers.objects.get(number=number)
     return render(request, 'Billing/custom_orders.html', context={

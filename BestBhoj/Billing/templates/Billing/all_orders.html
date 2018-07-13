@@ -19,6 +19,7 @@
                     <th>Payment Status</th>
                     <th>Amount</th>
                     <th>Date</th>
+                    <th>Delivery Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,30 +55,30 @@
                 {% for order in all_orders %}
                     <tr class="clickable-row" data-href="{% url 'specific_order' order.id %}">
                         {% if order.payment_status == True %}
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.name }}</td>
-                        <td>{{ order.phone_number }}</td>
-                        <td>{{ order.address }}</td>
-                        <td style="font-size:0.65vw;">
-                             {% if order.quantity_60 > 0 %} &#8377;60 Thali - {{ order.quantity_60 }}
-                            <br> {% endif %} {% if order.quantity_75 > 0 %} &#8377;75 Thali - {{ order.quantity_75 }}
-                            <br> {% endif %} {% if order.quantity_100 > 0 %} &#8377;100 Thali - {{ order.quantity_100 }}
-                            <br> {% endif %} {% if order.quantity_125 > 0 %} &#8377;125 Thali - {{ order.quantity_125 }}
-                            <br> {% endif %} {% if order.quantity_150 > 0 %} &#8377;150 Thali - {{ order.quantity_150 }}
-                            <br> {% endif %} {% if order.quantity_200 > 0 %} &#8377;200 Thali - {{ order.quantity_200 }}
-                            <br> {% endif %}
-                        </td>
-                        <td>{{ order.remarks }}</td>
-                        <td>{{ order.operator }}</td>
-                        {% if order.payment_status == True %}
-                            <td>Paid</td>
-                        {% else %}
-                            <td>Pending</td>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.name }}</td>
+                            <td>{{ order.phone_number }}</td>
+                            <td>{{ order.address }}</td>
+                            <td style="font-size:0.65vw;">
+                                 {% if order.quantity_60 > 0 %} &#8377;60 Thali - {{ order.quantity_60 }}
+                                <br> {% endif %} {% if order.quantity_75 > 0 %} &#8377;75 Thali - {{ order.quantity_75 }}
+                                <br> {% endif %} {% if order.quantity_100 > 0 %} &#8377;100 Thali - {{ order.quantity_100 }}
+                                <br> {% endif %} {% if order.quantity_125 > 0 %} &#8377;125 Thali - {{ order.quantity_125 }}
+                                <br> {% endif %} {% if order.quantity_150 > 0 %} &#8377;150 Thali - {{ order.quantity_150 }}
+                                <br> {% endif %} {% if order.quantity_200 > 0 %} &#8377;200 Thali - {{ order.quantity_200 }}
+                                <br> {% endif %}
+                            </td>
+                            <td>{{ order.remarks }}</td>
+                            <td>{{ order.operator }}</td>
+                            {% if order.payment_status == True %}
+                                <td>Paid</td>
+                            {% else %}
+                                <td>Pending</td>
+                            {% endif %}
+                            <td>&#8377;{{ order.amount }}</td>
+                            <td>{{ order.date }}</td>
+                            <td>{{ order.delivery_status }}</td>
                         {% endif %}
-                        <td>&#8377;{{ order.amount }}</td>
-                        {% endif %}
-                        <td>{{ order.date }}</td>
-                        <td>{{ order.delivery_status }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

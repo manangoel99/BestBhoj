@@ -23,7 +23,7 @@
             Remarks : {{ order.remarks }}
         </h4>
         <h4 class="text-center" style="font-family: 'Amatic SC', cursive;">
-            Delivery Boy : 
+            Delivery Boy : {{ order.delivery_boy }}
         </h4>
         <div class="row">
             <div class="offset-md-4 offset-lg-4"></div>
@@ -96,9 +96,12 @@
         </div>
     </div>
     <script>
-        $(document).ready(function (){
-            window.print();
-        });
+        window.onload = function () {
+            if (!window.location.hash) {
+                window.location = window.location + '#loaded';
+                window.location.reload();
+            }
+        }
     </script>
 </body>
 </html>

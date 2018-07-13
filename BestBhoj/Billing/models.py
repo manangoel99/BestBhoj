@@ -6,7 +6,6 @@ class orders(models.Model):
     name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=250)
-    #order = models.CharField(max_length=1000)
     quantity_60 = models.IntegerField(default=0)
     quantity_75 = models.IntegerField(default=0)
     quantity_100 = models.IntegerField(default=0)
