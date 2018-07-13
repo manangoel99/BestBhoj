@@ -10,17 +10,53 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <style>
+        .sidebar {
+          position: fixed;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          display: block;
+          overflow-x: hidden;
+          overflow-y: auto
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <a href="{% url 'logout' %}" class="btn btn-success">Log Out</a>
-        <a href="{% url 'takeorder' %}" class="btn btn-success">Take Order</a>
-        <a href="{% url 'all_orders' %}" class="btn btn-success">All Orders</a>
-        <a href="{% url 'all_customers' %}" class="btn btn-success">All Customers</a>
-        <a href="{% url 'dayrec' %}" class="btn btn-success">Record Of Day</a>
+    <div class="row">
+        <div class="sidebar col-md-4 col-lg-4">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Phone Number</th>
+                        <th>Address</th>
+                        <th>Delivery Boy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in undelivered %}
+                        <tr>
+                            <td>{{ order.phone_number }}</td>
+                            <td>{{ order.address }}</td>
+                            <td>{{ order.delivery_boy }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="offset-md-4 offset-lg-4 col-md-8 col-lg-8 col-sm-8 col-xs-8">
+            <div class="container">
+                <a href="{% url 'logout' %}" class="btn btn-success">Log Out</a>
+                <a href="{% url 'takeorder' %}" class="btn btn-success">Take Order</a>
+                <a href="{% url 'all_orders' %}" class="btn btn-success">All Orders</a>
+                <a href="{% url 'all_customers' %}" class="btn btn-success">All Customers</a>
+                <a href="{% url 'dayrec' %}" class="btn btn-success">Record Of Day</a>
+            </div>
+            {% block content %}
+            {% endblock %}
+        </div>
     </div>
-    {% block content %}
-    {% endblock %}
 </body>
 </html>

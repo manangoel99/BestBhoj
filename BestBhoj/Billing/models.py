@@ -21,6 +21,7 @@ class orders(models.Model):
     money_received = models.IntegerField(default=0)
     balance = models.IntegerField(default=0)
     date = models.DateField(auto_now_add=True)
+    delivery_status = models.BooleanField(default=False)
 
     def __str__ (self):
         return 'Order For ' + self.name 

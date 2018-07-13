@@ -9,6 +9,9 @@ from .invoice import generate
 from .forms import LogInForm
 
 # Create your views here.
+def get_undelivered():
+    return orders.objects.filter(delivery_status=False)
+
 def index(request):
     if request.method == 'POST':
         form = LogInForm(request.POST)
@@ -40,7 +43,8 @@ def order_display(request):
         all_orders = orders.objects.all()
         context = {
             'all_orders': all_orders,
-            'user' : request.user
+            'user' : request.user,
+            'undelivered' : get_undelivered()
         }
         return render(request, 'Billing/all_orders.html', context=context)
     else:
@@ -82,9 +86,11 @@ def take_order(request):
                 x.balance = order.balance
                 x.save()
             print(order.date)
-            generate(request, order)
+            #generate(request, order)
             return redirect('all_orders')
-        return render(request, 'Billing/takeorder.html')
+        return render(request, 'Billing/takeorder.html', context={
+            'undelivered': get_undelivered()
+        })
 
 
 #Displaying Specific Order Using primary key
@@ -129,13 +135,15 @@ def spec_order(request, primary_key):
         x = customers.objects.get(number=order.phone_number)
         return render(request, 'Billing/mod_order_admin.html', context={
             'customer' : x,
-            'order' : order
+            'order' : order,
+            'undelivered': get_undelivered()
         })
     if request.user.is_superuser == False and request.method == 'GET':
         x = customers.objects.get(number=order.phone_number)
         return render(request, 'Billing/order_page.html', context={
             'customer' : x,
-            'order': order
+            'order': order, 
+            'undelivered': get_undelivered()
         })
 
 
@@ -172,14 +180,17 @@ def all_customers(request):
         customer_dict[x['phone_number']] = balance
     #print(customer_dict)
     return render(request, 'Billing/all_customers.html', context={
-        'customer_dict' : customer_dict
+        'customer_dict' : customer_dict,
+        'undelivered': get_undelivered()
     })
 
 #Show Specific Date
 @login_required(login_url='/billing')
 def dayrec(request):
     if request.method == 'GET':
-        return render(request, 'Billing/spec_day_input.html')
+        return render(request, 'Billing/spec_day_input.html', context={
+            'undelivered': get_undelivered()
+        })
     if request.method == 'POST':
         #print(request.POST)
         #print(orders.objects.filter(date=request.POST['DayDate']))
@@ -190,7 +201,8 @@ def dayrec(request):
             tot_money_received += order.money_received
         return render(request, 'Billing/spec_day_record.html', context= {
             'orders' : reqd,
-            'money_received' : tot_money_received
+            'money_received' : tot_money_received,
+            'undelivered': get_undelivered()
         })
 
 @login_required(login_url='/billing')
@@ -199,7 +211,8 @@ def custompage(request, number):
     customer = customers.objects.get(number=number)
     return render(request, 'Billing/custom_orders.html', context={
         'customer' : customer,
-        'all_orders' : order
+        'all_orders' : order,
+        'undelivered': get_undelivered()
     })
 
 @login_required(login_url='/billing')
@@ -213,6 +226,7 @@ def genbill(request, order_num):
         'price_125' :  125 * order.quantity_125,
         'price_150' :  150 * order.quantity_150,
         'price_200' :  200 * order.quantity_200,
+        'undelivered': get_undelivered()
     })
 
 def log_out(request):
