@@ -5,7 +5,6 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 from .models import orders, customers
-from .invoice import generate
 from .forms import LogInForm
 
 # Create your views here.

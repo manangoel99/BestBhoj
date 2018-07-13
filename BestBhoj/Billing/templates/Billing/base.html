@@ -40,11 +40,50 @@
                             <td>{{ order.phone_number }}</td>
                             <td>{{ order.address }}</td>
                             <td>{{ order.delivery_boy }}</td>
+                            <td>
+                                <button type="button" data-toggle="modal" data-target="#ordermodal{{ order.pk }}" class="btn btn-success">
+                                    Order Details
+                                </button>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+
+        {% for order in undelivered %}
+            <div class="modal fade" id="ordermodal{{ order.pk }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Order for {{ order.name }}</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+            
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            Address : {{ order.address }} <br>
+                            Phone Number : {{ order.phone_number }} <br>
+                            Order : {% if order.quantity_60 > 0 %} &#8377;60 Thali - {{ order.quantity_60 }}
+                            <br> {% endif %} {% if order.quantity_75 > 0 %} &#8377;75 Thali - {{ order.quantity_75 }}
+                            <br> {% endif %} {% if order.quantity_100 > 0 %} &#8377;100 Thali - {{ order.quantity_100 }}
+                            <br> {% endif %} {% if order.quantity_125 > 0 %} &#8377;125 Thali - {{ order.quantity_125 }}
+                            <br> {% endif %} {% if order.quantity_150 > 0 %} &#8377;150 Thali - {{ order.quantity_150 }}
+                            <br> {% endif %} {% if order.quantity_200 > 0 %} &#8377;200 Thali - {{ order.quantity_200 }}
+                            <br> {% endif %}
+                            <br>
+                            Total : {{ order.amount }}
+                        </div>
+            
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+            
+                </div>
+            </div>
+        {% endfor %}
         
         <div class="offset-md-4 offset-lg-4 col-md-8 col-lg-8 col-sm-8 col-xs-8">
             <div class="container">
