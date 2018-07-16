@@ -96,6 +96,10 @@
                                 <td>{{ order.amount }}</td>
                             </tr>
                         </tbody>
+                        <tr>
+                            <td colspan="2">Due Amount</td>
+                            <td>{{ customer.balance }}</td>
+                        </tr>
                     
                     </table>
             </div>
@@ -105,7 +109,7 @@
         window.onload = function () {
             if (!window.location.hash) {
                 window.location = window.location + '#loaded';
-                window.location.reload();
+                window.setTimeout(window.location.reload(), 2000);
             }
         }
     </script>

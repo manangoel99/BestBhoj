@@ -257,6 +257,7 @@ def custompage(request, number):
 @login_required(login_url='/billing')
 def genbill(request, order_num):
     order = orders.objects.get(pk=order_num)
+    customer = customers.objects.get(number=order.phone_number)
     return render(request, 'Billing/bill_template.html', context={
         'order' : order,
         'price_60' :  60 * order.quantity_60,
@@ -265,7 +266,7 @@ def genbill(request, order_num):
         'price_125' :  125 * order.quantity_125,
         'price_150' :  150 * order.quantity_150,
         'price_200' :  200 * order.quantity_200,
-        'undelivered': get_undelivered()
+        'customer' : customer,
     })
 
 def log_out(request):
