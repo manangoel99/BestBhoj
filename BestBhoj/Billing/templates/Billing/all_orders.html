@@ -20,6 +20,7 @@
                     <th>Amount</th>
                     <th>Date</th>
                     <th>Delivery Status</th>
+                    <th>Delivery Boy</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,6 +50,7 @@
                         <td>&#8377;{{ order.amount }}</td>
                         <td>{{ order.date }}</td>
                         <td>{{ order.delivery_status }}</td>
+                        <td>{{ order.delivery_boy }}</td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -78,6 +80,7 @@
                             <td>&#8377;{{ order.amount }}</td>
                             <td>{{ order.date }}</td>
                             <td>{{ order.delivery_status }}</td>
+                            <td>{{ order.delivery_boy }}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}

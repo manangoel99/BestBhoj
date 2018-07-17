@@ -3,15 +3,28 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+import xlrd
 
-from .models import orders, customers
+from .models import orders, customers, menu
 from .forms import LogInForm
+
+def read_menu():
+    menu.objects.all().delete()
+    wb = xlrd.open_workbook('Billing/menu.xls')
+    sheet = wb.sheet_by_index(0)
+
+    for i in range(1, sheet.nrows):
+        item = menu()
+        item.item = sheet.cell_value(i, 1)
+        item.price = round(float(sheet.cell_value(i, 8)))
+        item.save()
+        print(sheet.cell_value(i, 1), round(float(sheet.cell_value(i, 8))))
+
+    
 
 # Create your views here.
 def status_change(request):
-    print(request.POST)
     order = orders.objects.get(pk=int(request.POST['order_id']))
-    print(order)
     order.delivery_boy = request.POST['delivery_boy']
     order.delivery_status = True
     order.save()
@@ -20,6 +33,7 @@ def get_undelivered():
     return orders.objects.filter(delivery_status=False)
 
 def index(request):
+    read_menu()
     if request.method == 'POST':
         form = LogInForm(request.POST)
         if form.is_valid():
@@ -44,9 +58,7 @@ def index(request):
 #Displaying All Orders 
 @login_required(login_url='/billing')
 def order_display(request):
-   # print(request.user)
     if request.user.is_authenticated:
-        #print(request.user)
         if request.method == 'POST' and 'status_change' in request.POST:
             print(request.POST)
             status_change(request)
@@ -66,11 +78,8 @@ def order_display(request):
 @login_required(login_url='/billing')
 def take_order(request):
     if request.user.is_authenticated:
-        print(request.user)
-        #print(request.method)
         if request.method == 'POST':
             if 'status_change' in request.POST:
-                print(request.POST)
                 status_change(request)
             else:
                 order = orders()
@@ -91,7 +100,6 @@ def take_order(request):
                 order.save()
                 try:
                     x = customers.objects.get(number=order.phone_number)
-                    print(type(x))
                     x.balance += order.balance
                     x.save()
                 except:
@@ -99,8 +107,6 @@ def take_order(request):
                     x.number = order.phone_number
                     x.balance = order.balance
                     x.save()
-                print(order.date)
-                #generate(request, order)
                 return redirect('all_orders')
         return render(request, 'Billing/takeorder.html', context={
             'undelivered': get_undelivered()
@@ -128,8 +134,6 @@ def spec_order(request, primary_key):
                 'order': order,
                 'undelivered': get_undelivered()
             })
-            
-    #print(order)
     if request.method == 'POST' and request.user.is_superuser == False and 'status_change' not in request.POST:
         if request.POST['payed_amount'] != '':
             order.money_received = request.POST['payed_amount']
@@ -141,7 +145,6 @@ def spec_order(request, primary_key):
             order.save()
             return redirect('all_orders')
     if request.user.is_superuser and request.method == 'POST' and 'status_change' not in request.POST:
-        #print(request.POST)
         x = customers.objects.get(number=order.phone_number)
         x.balance -= int(order.amount)
         order.quantity_60 = request.POST['60-thali']
@@ -214,7 +217,6 @@ def all_customers(request):
         for z in data:
             balance += z.balance
         customer_dict[x['phone_number']] = balance
-    #print(customer_dict)
     return render(request, 'Billing/all_customers.html', context={
         'customer_dict' : customer_dict,
         'undelivered': get_undelivered()
@@ -228,9 +230,6 @@ def dayrec(request):
             'undelivered': get_undelivered()
         })
     if request.method == 'POST':
-        #print(request.POST)
-        #print(orders.objects.filter(date=request.POST['DayDate']))
-        #return HttpResponse('Hola')
         reqd = orders.objects.filter(date=request.POST['DayDate'])
         tot_money_received = 0
         for order in reqd:

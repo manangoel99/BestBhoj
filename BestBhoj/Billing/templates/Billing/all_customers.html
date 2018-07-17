@@ -23,13 +23,16 @@
             </thead>
             <tbody id="data">
                 {% for number, balance in customer_dict.items %}
+                {% if number != '' %}
+                  
+                
                     <tr id="{{ number }}" class="clickable-row" data-href="{% url 'custompage' number %}">
                         <td class="phone_number">{{ number }}</td>
                         <td>
                             {{ balance }}
                         </td>
                     </tr>
-                  
+                {% endif %}
                 {% endfor %}
             </tbody>
         </table>

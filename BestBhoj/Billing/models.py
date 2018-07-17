@@ -31,3 +31,10 @@ class customers(models.Model):
 
     def __str__(self):
         return 'Customer : ' + self.number + ' ' + str(self.balance)
+
+class menu(models.Model):
+    item = models.CharField(max_length=100)
+    price = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.pk) + ' ' + self.item + ' : ' + str(self.price)

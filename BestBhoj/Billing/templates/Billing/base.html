@@ -69,6 +69,7 @@
                         <div class="modal-body">
                             Address : {{ order.address }} <br>
                             Phone Number : {{ order.phone_number }} <br>
+                            Remarks : {{ order.remarks }} <br>
                             Order : {% if order.quantity_60 > 0 %} &#8377;60 Thali - {{ order.quantity_60 }}
                             <br> {% endif %} {% if order.quantity_75 > 0 %} &#8377;75 Thali - {{ order.quantity_75 }}
                             <br> {% endif %} {% if order.quantity_100 > 0 %} &#8377;100 Thali - {{ order.quantity_100 }}

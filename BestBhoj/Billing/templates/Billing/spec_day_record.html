@@ -15,6 +15,7 @@
                     <th>Amount</th>
                     <th>Date</th>
                     <th>Money Received</th>
+                    <th>Delivery Boy</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,10 +44,11 @@
                     <td>&#8377;{{ order.amount }}</td>
                     <td>{{ order.date }}</td>
                     <td>{{ order.money_received }}</td>
+                    <td>{{ order.delivery_boy }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="10">Total Money</td>
+                    <td colspan="11">Total Money</td>
                     <td>{{ money_received }}</td>
                 </tr>
             </tbody>
