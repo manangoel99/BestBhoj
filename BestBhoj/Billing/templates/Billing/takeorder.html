@@ -8,8 +8,7 @@
 <div class="container">
     <br>
     <br>
-    <br>
-    <form action="{% url 'takeorder' %}" method="post">
+    <!--<form action="{% url 'takeorder' %}" method="post">
         {% csrf_token %}
         <h1 class="text-success">
             <strong> Order </strong>
@@ -104,8 +103,71 @@
                 </tr>
             </tbody>
         </table>
-    </form>
+    </form>-->
     <!--<div id="total"></div>-->
+    <form action="{% url 'takeorder' %}" method="post">
+        {% csrf_token %}
+        <h1 class="text-success">
+            <strong> Order </strong>
+        </h1>
+        <input type="number" name="item_no" id="item_no">
+        <input type="submit" value="Add Item" id="item_add" class="btn btn-success">
+        <table class="table table-borderless" id="order_table">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>Remarks</strong>
+                    </td>
+                    <td>
+                        <input type="text" name="remarks">
+                    </td>
+                    <td>
+                        <input type="submit" value="Take Order" class="btn btn-success">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Name</strong>
+                    </td>
+                    <td>
+                        <input type="text" name="name" id="name" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Phone Number</td>
+                    <td>
+                        <input type="text" name="number" required>
+                    </td>
+                    <td id="existing_balance">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>
+                        <input id="address" type="text" name="address">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Delivery Boy
+                    </td>
+                    <td>
+                        <input type="text" name="delivery-boy">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Total Bill
+                    </td>
+                    <td>
+                        <input id="total" type="number" value="0" name="amount">
+                    </td>
+                </tr>    
+            </tbody>
+        </table>
+    </form>
 </div>
 <script>
     $("input[name='number']").keyup(function () {
@@ -130,16 +192,45 @@
             }
         });
     });
-    $('.thali-num').click(function() {
-        var total = 0;
-        x = $('.thali-num');
-        total += (x[0].value * 60);
-        total += (x[1].value * 75);
-        total += (x[2].value * 100);
-        total += (x[3].value * 125);
-        total += (x[4].value * 150);
-        total += (x[5].value * 200);
-        document.getElementById('total').value = total;
-    })
+    $('#item_add').click(function(event) {
+        event.preventDefault();
+        $.ajax({
+            url : 'ajax/item_add',
+            data : {
+                'item_no' : $('#item_no').val()
+            },
+            dataType : 'json',
+            success : function(data) {
+                console.log(data);
+                $('#order_table tbody').append('<tr>' + 
+                    '<td>' + 
+                        data.name + 
+                    '</td>' + 
+                    '<td>' + 
+                        '<input type="number" id="rate' + $('#item_no').val() + '" value=' + data.rate + '>' + 
+                    '</td>' +
+                    '<td>' +
+                        '<input type="number" class="quantities" value="0" name=quantity' + $('#item_no').val() + '>' +  
+                    '</td>' + 
+                    '</tr>');
+                var all = document.getElementsByClassName('quantities');
+                console.clear();
+                console.log(all)
+                for (var i = 0; i < all.length; i = i + 1) {
+                    console.log(all[i]);
+                    all[i].addEventListener('click', function() {
+                        console.log(this);
+                        orig_val = this.value;
+                        name = 'rate' + this.name.replace('quantity', '');
+                        //document.getElementById('total').value += parseInt(('input[name="' + name + '"]').val());
+                        document.getElementById('total').value = parseInt(document.getElementById('total').value) + parseInt(document.getElementById(name).value);
+                    });
+                }
+                
+            }
+        });
+    });
+    
+    
 </script> 
 {% endblock content %}

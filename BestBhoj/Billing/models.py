@@ -6,12 +6,7 @@ class orders(models.Model):
     name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=250)
-    quantity_60 = models.IntegerField(default=0)
-    quantity_75 = models.IntegerField(default=0)
-    quantity_100 = models.IntegerField(default=0)
-    quantity_125 = models.IntegerField(default=0)
-    quantity_150 = models.IntegerField(default=0)
-    quantity_200 = models.IntegerField(default=0)
+    order = models.CharField(max_length = 10000)
     remarks = models.CharField(max_length=1000)
     operator = models.CharField(max_length=50)
     payment_status = models.BooleanField(default=False)
@@ -21,6 +16,7 @@ class orders(models.Model):
     balance = models.IntegerField(default=0)
     date = models.DateField(auto_now_add=True)
     delivery_status = models.BooleanField(default=False)
+    money_receive_date = models.DateField()
 
     def __str__ (self):
         return 'Order For ' + self.name 

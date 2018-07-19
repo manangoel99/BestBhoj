@@ -33,39 +33,10 @@
         </thead>
         <tbody>
           <tr>
-            <td>&#8377; 60</td>
+            <td>Order</td>
             <td>
-              <input class="thali-num" type="number" value="{{ order.quantity_60 }}" name="60-thali" readonly>
-            </td>
-          </tr>
-          <tr>
-            <td>&#8377; 75</td>
-            <td>
-              <input class="thali-num" type="number" value="{{ order.quantity_75 }}" name="75-thali" readonly>
-            </td>
-          </tr>
-          <tr>
-            <td>&#8377; 100</td>
-            <td>
-              <input class="thali-num" type="number" value="{{ order.quantity_100 }}" name="100-thali" readonly>
-            </td>
-          </tr>
-          <tr>
-            <td>&#8377; 125</td>
-            <td>
-              <input class="thali-num" type="number" value="{{ order.quantity_125 }}" name="125-thali" readonly>
-            </td>
-          </tr>
-          <tr>
-            <td>&#8377; 150</td>
-            <td>
-              <input class="thali-num" type="number" value="{{ order.quantity_150 }}" name="150-thali" readonly>
-            </td>
-          </tr>
-          <tr>
-            <td>&#8377; 200</td>
-            <td>
-              <input class="thali-num" type="number" value="{{ order.quantity_200 }}" name="200-thali" readonly>
+               {% for key, value in actual_orders.items %} {% if key == order.pk %} {% for x in value %} {{ x }}
+              <br> {% endfor %} {% endif %} {% endfor %}
             </td>
           </tr>
           <tr>
