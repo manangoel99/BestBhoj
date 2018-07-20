@@ -7,16 +7,16 @@ class orders(models.Model):
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=250)
     order = models.CharField(max_length = 10000)
-    remarks = models.CharField(max_length=1000)
+    remarks = models.CharField(max_length=1000, null=True, blank=True)
     operator = models.CharField(max_length=50)
     payment_status = models.BooleanField(default=False)
     amount = models.IntegerField()
-    delivery_boy = models.CharField(max_length=100)
+    delivery_boy = models.CharField(max_length=100, null=True, blank=True)
     money_received = models.IntegerField(default=0)
     balance = models.IntegerField(default=0)
     date = models.DateField(auto_now_add=True)
     delivery_status = models.BooleanField(default=False)
-    money_receive_date = models.DateField()
+    money_receive_date = models.DateField(null=True, blank=True)
 
     def __str__ (self):
         return 'Order For ' + self.name 

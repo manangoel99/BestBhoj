@@ -1,7 +1,7 @@
 {% extends "Billing/base.html" %}
 {% block content %}
   
-  <div class="container">
+  <!--<div class="container">
 
     <br>
     <br>
@@ -125,5 +125,186 @@
         console.log($('#status').val())
       })
     });
-  </script>
+  </script>-->
+
+<div class="container">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <h1 class="text-success">
+    Current Balance : {{ customer.balance }}
+  </h1>
+
+  <form action="{% url 'specific_order' order.pk %}" method="post">
+    {% csrf_token %}
+    <h1 class="text-success">
+      <strong> Order </strong>
+    </h1>
+    <input type="number" name="item_no" id="item_no" readonly>
+    <input type="submit" value="Add Item" id="item_add" class="btn btn-success" disabled>
+    <table class="table table-borderless" id="order_table">
+      <thead>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong>Remarks</strong>
+          </td>
+          <td>
+            <input type="text" value="{{ order.remarks }}" name="remarks">
+          </td>
+          <td>
+            <input type="submit" value="Edit Order" class="btn btn-success">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Name</strong>
+          </td>
+          <td>
+            <input type="text" value="{{ order.name }}" name="name" id="name" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Phone Number</td>
+          <td>
+            <input type="text" value="{{ order.phone_number }}" name="number" required>
+          </td>
+        </tr>
+        <tr>
+          <td>Order</td>
+          <!--{#<td>{% for key, value in actual_orders.items %} {% if key == order.pk %} {% for x in value %}<div class="order_x"> {{ x }} </div>
+          <br> {% endfor %} {% endif %} {% endfor %}</td>#}-->
+          <td id="actual_order">
+
+          </td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>
+            <input type="number" id="total" name="amount" value="{{ order.amount }}" readonly>
+          </td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>
+            <input type="text" value="{{ order.address }}" name="address">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Delivery Boy
+          </td>
+          <td>
+            <input type="text" value="{{ order.delivery_boy }}" name="delivery-boy">
+          </td>
+        </tr>
+        </tr>{% if order.money_received %}
+        <tr>
+          <td>Payment Made</td>
+          <td>
+            <input id="payed_amount" type="text" name="payed_amount" value="{{ order.money_received }}" readonly>
+          </td>
+        </tr>
+        <tr>
+          <td>Balance</td>
+          <td>
+            <input id="balance" type="text" name="balance_left" value="{{ order.balance }}" readonly>
+          </td>
+        </tr>
+        {% else %}
+
+        <tr>
+          <td>Payment Made</td>
+          <td>
+            <input id="payed_amount" type="text" name="payed_amount" value="0">
+          </td>
+        </tr>
+        <tr>
+          <td>Balance</td>
+          <td>
+            <input id="balance" type="text" name="balance_left" value="0">
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+
+    </table>
+  </form>
+</div>
+<script>
+  $(document).ready(function () {
+    m = '{{ order.order  }}';
+    k = m.split(',');
+    for (var i = 0; i < k.length - 1; i = i + 1) {
+      z = k[i].split(' ');
+      //console.log(menu[parseInt(z[0])]);
+      x = document.getElementById('actual_order');
+      //console.log(x);
+      x.innerHTML = x.innerHTML + '<input type="text" value="' + menu[parseInt(z[0])].name + '" readonly>';
+      x.innerHTML = x.innerHTML + '<input type="number" value="' + menu[parseInt(z[0])].rate + '" id="rate' + z[0] + '"' + ' readonly>';
+      x.innerHTML = x.innerHTML + '<input type="number" class="quantities" value="' + z[1] + '" name="quantity' + z[0] + '" readonly>';
+      x.innerHTML += '<br>'
+      $('#total').val();
+      z = document.getElementsByClassName('quantities');
+      for (let i = 0; i < z.length; i = i + 1) {
+        z[i].addEventListener('click', get_tot);
+      }
+    }
+  });
+  $(document).ready(function () {
+    $('#payed_amount').keyup(function () {
+      $('#balance').val(-1 * (parseInt($('#payed_amount').val()) - parseInt($('#total').val())));
+    });
+  });
+  function get_tot() {
+    console.log('HAHA');
+    z = document.getElementsByClassName('quantities');
+    var total = 0;
+    for (let i = 0; i < z.length; i = i + 1) {
+      name = 'rate' + z[i].name.replace('quantity', '');
+      total += document.getElementById(name).value * z[i].value;
+    }
+    console.log(total);
+    $('#total').val(total);
+  }
+  $('#item_add').click(function (event) {
+    event.preventDefault();
+    $.ajax({
+      url: '{% url "add_item" %}',
+      data: {
+        'item_no': $('#item_no').val()
+      },
+      dataType: 'json',
+      success: function (data) {
+        console.log(data);
+        //console.log("HAHA");
+        x = document.getElementById('actual_order');
+        x.innerHTML = x.innerHTML + '<input type="text" value="' + data.name + '" readonly>';
+        x.innerHTML = x.innerHTML + '<input type="number"' + 'id="rate' + $('#item_no').val() + '"' + ' value="' + data.rate + '" readonly>';
+        x.innerHTML = x.innerHTML + '<input type="number" class=quantities value="0" name="quantity' + $('#item_no').val() + '" readonly>';
+        x.innerHTML += '<br>';
+
+        z = document.getElementsByClassName('quantities');
+        for (let i = 0; i < z.length; i = i + 1) {
+          z[i].addEventListener('click', get_tot)
+          //function (){
+          /*            name = 'rate' + this.name.replace('quantity', '');
+                      let total = 0;
+                      k = document.getElementsByClassName('quantities');
+                      for (let j = 0; j < k.length; j = j + 1) {
+                        name = 'rate' + this.name.replace('quantity', '');
+                        total = total + parseInt(document.getElementById(name).value) * parseInt(k[j].value);
+                        console.log(total);
+                        console.log(k[j], k[j].value)
+                      }*/
+          //});
+        }
+      }
+    });
+  });
+
+</script>
 {% endblock content %}

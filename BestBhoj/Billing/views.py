@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 import xlrd
 import json
-
+import datetime
 from .models import orders, customers
 from .forms import LogInForm
 
@@ -285,6 +285,7 @@ def spec_order(request, primary_key):
         order.remarks = request.POST['remarks']
         order.phone_number = request.POST['number']
         #order.balance = request.POST['balance_left']
+        x.balance += int(request.POST['amount'])
         order.order = ''
         for key in request.POST:
             if key.startswith('quantity'):
@@ -292,6 +293,7 @@ def spec_order(request, primary_key):
         if order.deliver_boy != '':
             order.delivery_status = True
         if request.POST['payed_amount'] != '0':
+            order.money_receive_date = datetime.datetime.today()
             order.money_received = request.POST['payed_amount']
             order.payment_status = True
             order.balance = request.POST['balance_left']
