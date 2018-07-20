@@ -318,6 +318,7 @@
       z = document.getElementsByClassName('quantities');
       for (let i = 0; i < z.length; i = i + 1) {
         z[i].addEventListener('click', get_tot); 
+        z[i].addEventListener('keyup', get_tot);
       }
     }
   });
