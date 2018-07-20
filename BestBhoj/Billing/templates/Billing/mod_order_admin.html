@@ -306,10 +306,14 @@
       //console.log(menu[parseInt(z[0])]);
       x = document.getElementById('actual_order');
       //console.log(x);
-      x.innerHTML = x.innerHTML + '<input type="text" value="' + menu[parseInt(z[0])].name +'">'; 
-      x.innerHTML = x.innerHTML + '<input type="number" value="' + menu[parseInt(z[0])].rate + '" id="rate' + z[0] + '"' + '>';
-      x.innerHTML = x.innerHTML + '<input type="number" class="quantities" value="' + z[1] + '" name="quantity' + z[0] + '">';
-      x.innerHTML += '<br>'
+      //x.innerHTML = x.innerHTML + '<input type="text" value="' + menu[parseInt(z[0])].name +'">'; 
+      //x.innerHTML = x.innerHTML + '<input type="number" value="' + menu[parseInt(z[0])].rate + '" id="rate' + z[0] + '"' + '>';
+      //x.innerHTML = x.innerHTML + '<input type="number" class="quantities" value="' + z[1] + '" name="quantity' + z[0] + '">';
+      //x.innerHTML += '<br>'
+      $('#actual_order').append('<input type="text" value="' + menu[parseInt(z[0])].name + '">' +
+        '<input type="number"' + 'id="rate' + z[0] + '"' + ' value="' + menu[parseInt(z[0])].rate + '">' +
+        '<input type="number" class=quantities value="' + z[1] + '" name="quantity' + z[0] + '">' +
+        '<br>');
       $('#total').val();
       z = document.getElementsByClassName('quantities');
       for (let i = 0; i < z.length; i = i + 1) {
@@ -323,14 +327,14 @@
     });
   });
   function get_tot() {
-    console.log('HAHA');
+    //console.log('HAHA');
     z = document.getElementsByClassName('quantities');
     var total = 0;
     for (let i = 0; i < z.length; i = i + 1) {
       name = 'rate' + z[i].name.replace('quantity', '');
       total += document.getElementById(name).value * z[i].value;
     }
-    console.log(total);
+    //console.log(total);
     $('#total').val(total);
   }
   $('#item_add').click(function (event) {
@@ -342,13 +346,17 @@
       },
       dataType : 'json',
       success : function(data) {
-        console.log(data);
+        //console.log(data);
         //console.log("HAHA");
-        x = document.getElementById('actual_order');
-        x.innerHTML = x.innerHTML + '<input type="text" value="' + data.name + '">';
-        x.innerHTML = x.innerHTML + '<input type="number"' + 'id="rate' + $('#item_no').val() + '"'  + ' value="' + data.rate + '">';
-        x.innerHTML = x.innerHTML + '<input type="number" class=quantities value="0" name="quantity' + $('#item_no').val() + '">';
-        x.innerHTML += '<br>';
+        //x = document.getElementById('actual_order');
+        //x.innerHTML = x.innerHTML + '<input type="text" value="' + data.name + '">';
+        //x.innerHTML = x.innerHTML + '<input type="number"' + 'id="rate' + $('#item_no').val() + '"'  + ' value="' + data.rate + '">';
+        //x.innerHTML = x.innerHTML + '<input type="number" class=quantities value="0" name="quantity' + $('#item_no').val() + '">';
+        //x.innerHTML += '<br>';
+        $('#actual_order').append('<input type="text" value="' + data.name + '">' + 
+            '<input type="number"' + 'id="rate' + $('#item_no').val() + '"' + ' value="' + data.rate + '">' +
+            '<input type="number" class=quantities value="0" name="quantity' + $('#item_no').val() + '">' + 
+            '<br>');
         
         z = document.getElementsByClassName('quantities');
         for(let i = 0; i < z.length; i = i + 1) {

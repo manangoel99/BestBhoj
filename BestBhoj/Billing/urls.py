@@ -13,6 +13,6 @@ urlpatterns = [
     path('allcustomers', views.all_customers, name='all_customers'),
     path('dayrec', views.dayrec, name='dayrec'),
     path('custompage/<number>', views.custompage, name='custompage'),
-    #path('bill/<order_num>', views.genbill, name='genbill'),
+    path('bill/<order_num>', views.genbill, name='genbill'),
     path('ajax/item_add', views.ajax_item_add, name='add_item')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

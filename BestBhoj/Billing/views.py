@@ -286,6 +286,7 @@ def spec_order(request, primary_key):
         order.phone_number = request.POST['number']
         #order.balance = request.POST['balance_left']
         x.balance += int(request.POST['amount'])
+        order.balance = int(request.POST['amount'])
         order.order = ''
         for key in request.POST:
             if key.startswith('quantity'):
@@ -405,20 +406,39 @@ def custompage(request, number):
         'actual_orders': orders_all()   
     })
 
-#@login_required(login_url='/billing')
-#def genbill(request, order_num):
-#    order = orders.objects.get(pk=order_num)
-#    customer = customers.objects.get(number=order.phone_number)
-#    return render(request, 'Billing/bill_template.html', context={
-#        'order' : order,
+@login_required(login_url='/billing')
+def genbill(request, order_num):
+    order = orders.objects.get(pk=order_num)
+    customer = customers.objects.get(number=order.phone_number)
+    m = order.order.split(',')
+    print(m)
+    z = []
+    for x in m:
+        k = x.split(' ')
+        try:
+            print(k, menu[int(k[0])])
+        except:
+            read_menu()    
+        try:
+
+            print(menu[int(k[0])])
+            z.append([menu[int(k[0])]['name'], menu[int(k[0])]['rate'], k[1]])
+        except:
+            continue
+    
+    print(z)
+
+    return render(request, 'Billing/bill_template.html', context={
+        'order' : order,
 #        'price_60' :  60 * order.quantity_60,
 #        'price_75' :  75 * order.quantity_75,
 #        'price_100' :  100 * order.quantity_100,
 #        'price_125' :  125 * order.quantity_125,
 #        'price_150' :  150 * order.quantity_150,
 #        'price_200' :  200 * order.quantity_200,
-#        'customer' : customer,
-#    })
+        'act_order' : z,
+        'customer' : customer,
+    })
 
 def log_out(request):
     logout(request)

@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center" style="font-family: 'Amatic SC', cursive; font-weight:bold;">Best Bhoj</h1>
+        <h1 class="text-center" style="font-family: 'Amatic SC', cursive; font-weight:bold;">VS Foods</h1>
         <h3 class="text-center" style="font-family: 'Amatic SC', cursive;">
             First Floor, S.C.O - 6, Sector - 8
             <br>
@@ -36,61 +36,19 @@
                 <div class="col-md-4">
                     <table class="table table-borderless">
                         <thead>
-                            <tr>
-                                <th>
-                                    Type
-                                </th>
-                                <th>
-                                    Quantity
-                                </th>
-                                <th>
-                                    Price
-                                </th>
-                            </tr>
+                            <th>Item</th>
+                            <th>Rate</th>
+                            <th>Quantity</th>
                         </thead>
                         <tbody>
-                            {% if order.quantity_60 > 0 %}
-                                <tr>
-                                    <td>&#8377;60 Thali</td>
-                                    <td>{{ order.quantity_60 }}</td>
-                                    <td>{{ price_60 }}</td>
-                                </tr>
-                            {% endif %}
-                            {% if order.quantity_75 > 0 %}
-                            <tr>
-                                <td>&#8377;75 Thali</td>
-                                <td>{{ order.quantity_75 }}</td>
-                                <td>{{ price_75 }}</td>
-                            </tr>
-                            {% endif %}
-                             {% if order.quantity_100 > 0 %}
-                            <tr>
-                                <td>&#8377;100 Thali</td>
-                                <td>{{ order.quantity_100 }}</td>
-                                <td>{{ price_100 }}</td>
-                            </tr>
-                            {% endif %}
-                             {% if order.quantity_125 > 0 %}
-                            <tr>
-                                <td>&#8377;125 Thali</td>
-                                <td>{{ order.quantity_125 }}</td>
-                                <td>{{ price_125 }}</td>
-                            </tr>
-                            {% endif %}
-                             {% if order.quantity_150 > 0 %}
-                            <tr>
-                                <td>&#8377;150 Thali</td>
-                                <td>{{ order.quantity_150 }}</td>
-                                <td>{{ price_150 }}</td>
-                            </tr>
-                            {% endif %}
-                             {% if order.quantity_200 > 0 %}
-                            <tr>
-                                <td>&#8377;200 Thali</td>
-                                <td>{{ order.quantity_200 }}</td>
-                                <td>{{ price_200 }}</td>
-                            </tr>
-                            {% endif %}
+                            {% for ord in act_order  %}
+                              <tr>
+                                {% for x in ord %}
+                                  <td>{{ x }}</td>
+                                  
+                                {% endfor %}
+                              </tr>
+                            {% endfor %}
                             <tr>
                                 <td colspan="2">Amount</td>
                                 <td>{{ order.amount }}</td>
