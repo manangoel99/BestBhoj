@@ -12,42 +12,31 @@ from .forms import LogInForm
 menu = {}
 
 def read_menu():
-    #menu.objects.all().delete()
     wb = xlrd.open_workbook('Billing/menu.xls')
     sheet = wb.sheet_by_index(0)
 
     for i in range(1, sheet.nrows):
-        #item = menu()
-        #item.item = sheet.cell_value(i, 1)
-        #item.price = round(float(sheet.cell_value(i, 8)))
-        #item.save()
         menu[i] = {
             'name' : sheet.cell_value(i, 1).rstrip(),
             'rate': round(float(sheet.cell_value(i, 8)))
         }
         with open('menu.json', 'w') as fp:
             json.dump(menu, fp)
-        #print(sheet.cell_value(i, 1), round(float(sheet.cell_value(i, 8))))
-    #print (menu)
 
 def orders_all():
     all_orders = orders.objects.all()
     actual_orders = {}
-    print(menu)
     for order in all_orders:
         actual_orders[order.pk] = ''
         x = order.order.split(",")
         for z in x:
             z = z.split(' ')
-            print(z)
-            print(order.pk)
             try:
                 actual_orders[order.pk] = actual_orders[order.pk] + \
                     str(menu[int(z[0])]['name']) + ' ' + str(z[1]) + ','
             except:
                 continue
         actual_orders[order.pk] = actual_orders[order.pk].split(',')
-        #print(type(actual_orders[order.pk]))
         for order in actual_orders[order.pk]:
             order = order.split(' ')
     
@@ -65,9 +54,6 @@ def get_undelivered():
     return orders.objects.filter(delivery_status=False)
 
 def ajax_item_add(request):
-    #print(menu)
-    #print(request.GET['item_no'])
-    #print(menu[1])
     try:
         data = {
             'name': menu[int(request.GET['item_no'])]['name'],
@@ -133,12 +119,6 @@ def take_order(request):
             if 'status_change' in request.POST:
                 status_change(request)
             else:
-                #print(request.POST)
-                #for key in request.POST:
-                #    if key.startswith('quantity'):
-                #        print(key[8:])
-                #        value = request.POST[key]
-                #        print(value)
                 order = orders()
                 order.name = request.POST['name']
                 order.phone_number = request.POST['number']
@@ -146,7 +126,6 @@ def take_order(request):
                 for key in request.POST:
                     if key.startswith('quantity'):
                         order.order = order.order + str(key[8:]) + ' ' + str(request.POST[key]) + ','
-                #print(order.order)
                 order.address = request.POST['address']
                 order.remarks = request.POST['remarks']
                 order.operator = request.user.username
@@ -280,11 +259,9 @@ def spec_order(request, primary_key):
         order.name = request.POST['name']
         order.deliver_boy = request.POST['delivery-boy']
         order.address = request.POST['address']
-        #order.money_received = request.POST['payed_amount']
         order.amount = request.POST['amount']
         order.remarks = request.POST['remarks']
         order.phone_number = request.POST['number']
-        #order.balance = request.POST['balance_left']
         x.balance += int(request.POST['amount'])
         order.balance = int(request.POST['amount'])
         order.order = ''
@@ -324,11 +301,6 @@ def spec_order(request, primary_key):
             'undelivered': get_undelivered(),
             'menu' : menu
         })
-    #return render(request, 'Billing/order_page.html', context={
-    #    'order' : order,
-    #    'actual_orders' : orders_all(),
-    #    'undelivered' : get_undelivered()
-    #})
         
 
 #Ajax Request Handling
@@ -425,17 +397,9 @@ def genbill(request, order_num):
             z.append([menu[int(k[0])]['name'], menu[int(k[0])]['rate'], k[1]])
         except:
             continue
-    
-    print(z)
 
     return render(request, 'Billing/bill_template.html', context={
         'order' : order,
-#        'price_60' :  60 * order.quantity_60,
-#        'price_75' :  75 * order.quantity_75,
-#        'price_100' :  100 * order.quantity_100,
-#        'price_125' :  125 * order.quantity_125,
-#        'price_150' :  150 * order.quantity_150,
-#        'price_200' :  200 * order.quantity_200,
         'act_order' : z,
         'customer' : customer,
     })

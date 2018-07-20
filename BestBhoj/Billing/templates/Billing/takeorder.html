@@ -192,6 +192,18 @@
             }
         });
     });
+
+    function get_tot(){
+        z = $('.quantities');
+        var total = 0;
+        for (let i = 0; i < z.length; i += 1){
+            name = 'rate' + z[i].name.replace('quantity', '');
+            total += document.getElementById(name).value * z[i].value;
+        }
+        console.log(total);
+        $("#total").val(total);
+    }
+
     $('#item_add').click(function(event) {
         event.preventDefault();
         $.ajax({
@@ -218,13 +230,15 @@
                 console.log(all)
                 for (var i = 0; i < all.length; i = i + 1) {
                     console.log(all[i]);
-                    all[i].addEventListener('click', function() {
-                        console.log(this);
-                        orig_val = this.value;
-                        name = 'rate' + this.name.replace('quantity', '');
-                        //document.getElementById('total').value += parseInt(('input[name="' + name + '"]').val());
-                        document.getElementById('total').value = parseInt(document.getElementById('total').value) + parseInt(document.getElementById(name).value);
-                    });
+                    all[i].addEventListener('click', get_tot);
+                    all[i].addEventListener('keyup', get_tot);
+                    //function() {
+                    //    console.log(this);
+                    //    orig_val = this.value;
+                    //    name = 'rate' + this.name.replace('quantity', '');
+                    //    //document.getElementById('total').value += parseInt(('input[name="' + name + '"]').val());
+                    //    document.getElementById('total').value = parseInt(document.getElementById('total').value) + parseInt(document.getElementById(name).value);
+                    //});
                 }
                 
             }
