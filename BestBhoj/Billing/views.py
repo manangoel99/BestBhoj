@@ -12,7 +12,7 @@ from .forms import LogInForm
 menu = {}
 
 def read_menu():
-    wb = xlrd.open_workbook('Billing/menu.xls')
+    wb = xlrd.open_workbook('Billing\menu.xls')
     sheet = wb.sheet_by_index(0)
 
     for i in range(1, sheet.nrows):
@@ -25,6 +25,7 @@ def read_menu():
 
 def orders_all():
     all_orders = orders.objects.all()
+    print(type(all_orders))
     actual_orders = {}
     for order in all_orders:
         actual_orders[order.pk] = ''
@@ -268,9 +269,10 @@ def spec_order(request, primary_key):
         for key in request.POST:
             if key.startswith('quantity'):
                 order.order = order.order + str(key[8:]) + ' ' + str(request.POST[key]) + ','
-        if order.deliver_boy != '':
+        if order.delivery_boy != '':
             order.delivery_status = True
         if request.POST['payed_amount'] != '0':
+            order.delivery_status = True
             order.money_receive_date = datetime.datetime.today()
             order.money_received = request.POST['payed_amount']
             order.payment_status = True

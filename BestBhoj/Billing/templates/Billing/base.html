@@ -40,6 +40,7 @@
                 <tbody>
                     {% for order in undelivered %}
                         <tr>
+                            <td>{{ order.name }}</td>>
                             <td>{{ order.phone_number }}</td>
                             <td>{{ order.address }}</td>
                             <td>{{ order.delivery_boy }}</td>
@@ -112,7 +113,8 @@
         </div>
     </div>
     <script>
-        $('#ajaj').click(function () {
+        $('#ajaj').click(function (event) {
+            //event.preventDefault();
             x = $('#order_id').val();
             window.open('/bill/' + x, '_blank');
         });
